@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kleinwind im Garten</title>
+<meta name="description" content="Vertikale Kleinwindanlage per Handy in den eigenen Garten stellen und den realistischen Ertrag selbst berechnen.">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.0.0/dist/model-viewer.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root{--bg:#f6f5f1;--paper:#fff;--ink:#1f2326;--ink2:#4a4f53;--mute:#7c8186;--rule:#dcd8cf;--anth:#383e42;--red:#e0674c;--ok:#1f8a7c}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#16191b;--paper:#1f2326;--ink:#eceae5;--ink2:#c3c6c8;--mute:#93989c;--rule:#363b3f;--ok:#4cc2b1}}
+:root[data-theme="dark"]{--bg:#16191b;--paper:#1f2326;--ink:#eceae5;--ink2:#c3c6c8;--mute:#93989c;--rule:#363b3f;--ok:#4cc2b1}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',Arial,sans-serif;line-height:1.5}
+header{background:var(--anth);color:#f4f2ee;padding:28px 0 24px}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+h1{margin:6px 0 8px;font-size:clamp(26px,5vw,40px);line-height:1.1}
+h2{font-size:20px;margin:28px 0 10px}
+header p{margin:0;color:#e9e4dc;max-width:640px;text-align:justify;hyphens:auto}
+.stage{position:relative;margin-top:20px}
+model-viewer{width:100%;height:min(62vh,520px);background:radial-gradient(circle at 50% 40%,#e8f1f4,#cfdde3);border-radius:14px}
+.arbtn{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);background:var(--red);color:#fff;border:0;border-radius:999px;padding:14px 22px;font:600 16px 'IBM Plex Sans',sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.25);cursor:pointer;white-space:nowrap}
+.hint{font-size:13px;color:var(--mute);margin:8px 2px 0}
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ctl{background:var(--paper);border:1px solid var(--rule);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:14px}
+.row label{display:flex;justify-content:space-between;gap:8px;font-size:14px;color:var(--ink2)}
+.row output{font-family:'IBM Plex Mono',monospace;color:var(--ink);font-weight:500}
+input[type=range]{width:100%;accent-color:var(--red)}
+select{width:100%;padding:8px;border-radius:8px;border:1px solid var(--rule);background:var(--paper);color:var(--ink);font:inherit}
+.res{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-content:start}
+.res div{background:var(--anth);color:#e9e4dc;border-radius:10px;padding:12px 14px;border-top:4px solid var(--red)}
+.res small{display:block;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--red)}
+.res b{font-size:22px;color:#faf8f4;font-variant-numeric:tabular-nums}
+.res .wide{grid-column:1/-1}
+.box{background:var(--paper);border:1px solid var(--rule);border-radius:12px;padding:16px 18px;margin:18px 0}
+.box p,.box li{text-align:justify;hyphens:auto}
+.note{font-size:13px;color:var(--mute);text-align:justify;hyphens:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:6px 4px;border-bottom:1px solid var(--rule);text-align:left}
+footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font-size:12.5px;color:var(--mute)}
+@media (max-width:760px){.calc{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="eyebrow">Kleinwind · Demo zum Ausprobieren</div>
+  <h1>Kleinwind im eigenen Garten</h1>
+  <p>Stellen Sie die Anlage mit dem Handy in Ihren Garten und sehen Sie, wie groß sie wirklich ist. Darunter rechnen Sie selbst, was sie an Ihrem Standort realistisch bringt.</p>
+</div></header>
+
+<div class="wrap">
+  <div class="stage">
+    <model-viewer id="mv" src="kleinwind.glb" alt="3D-Modell einer vertikalen Kleinwindanlage mit drehendem Rotor" ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto" camera-controls touch-action="pan-y" autoplay shadow-intensity="1" exposure="1.05" camera-orbit="30deg 78deg auto" environment-image="neutral">
+      <button slot="ar-button" class="arbtn">📱 In den Garten stellen</button>
+    </model-viewer>
+  </div>
+  <p class="hint">Modell im Maßstab 1:20 (Mast 6 m, Rotor 3 m hoch und 3 m breit). Im Garten auf echte Größe ziehen: mit zwei Fingern vergrößern.</p>
+
+  <h2>Was bringt sie bei mir?</h2>
+  <div class="calc">
+    <div class="ctl">
+      <div class="row"><label for="p">Anlagengröße <output id="pO"></output></label>
+        <select id="p"><option value="1.5">1,5 kW</option><option value="2.5">2,5 kW</option><option value="3.5" selected>3,5 kW</option><option value="4.5">4,5 kW</option><option value="6">6 kW</option><option value="10">10 kW</option></select></div>
+      <div class="row"><label for="v">Mittlere Windgeschwindigkeit in 10 m Höhe <output id="vO"></output></label><input id="v" type="range" min="2.5" max="7" step="0.1" value="4"></div>
+      <div class="row"><label for="h">Masthöhe (Nabe) <output id="hO"></output></label><input id="h" type="range" min="6" max="20" step="1" value="10"></div>
+      <div class="row"><label for="g">Gelände</label>
+        <select id="g"><option value="0.14">offen (Feld, Küste)</option><option value="0.2" selected>ländlich, vereinzelt Bäume</option><option value="0.28">Ortsrand, Bebauung</option></select></div>
+      <div class="row"><label for="pr">Strompreis, den Sie zahlen <output id="prO"></output></label><input id="pr" type="range" min="20" max="50" step="0.5" value="35"></div>
+      <div class="row"><label for="ev">Davon selbst verbraucht <output id="evO"></output></label><input id="ev" type="range" min="20" max="100" step="5" value="60"></div>
+      <div class="row"><label for="fe">Vergütung für eingespeisten Rest <output id="feO"></output></label><input id="fe" type="range" min="0" max="12" step="0.5" value="7"></div>
+      <div class="row"><label for="ck">Anschaffung je kW <output id="ckO"></output></label><input id="ck" type="range" min="3000" max="9000" step="250" value="6000"></div>
+    </div>
+    <div class="res">
+      <div><small>Wind an der Nabe</small><b id="rV">–</b></div>
+      <div><small>Auslastung</small><b id="rCF">–</b></div>
+      <div class="wide"><small>Strom pro Jahr</small><b id="rE">–</b></div>
+      <div><small>Ersparnis pro Jahr</small><b id="rS">–</b></div>
+      <div><small>Anschaffung</small><b id="rC">–</b></div>
+      <div class="wide"><small>Hat sich bezahlt gemacht nach</small><b id="rP">–</b></div>
+    </div>
+  </div>
+
+  <div class="box">
+    <h3 style="margin:0 0 6px">Warum diese Zahlen ehrlich sind</h3>
+    <p>Wind ist nicht immer gleich stark. Der Rechner verteilt die mittlere Windgeschwindigkeit so, wie Wind in Deutschland typischerweise weht (Rayleigh-Verteilung), und rechnet für jede Windstärke, wie viel die Anlage liefert: ab 2,5 m/s Anlauf, volle Leistung ab 11 m/s. Je höher der Mast, desto stärker der Wind – Bäume und Häuser bremsen ihn. Daraus ergibt sich die Auslastung: wie viel Prozent der Zeit die Anlage umgerechnet mit voller Kraft läuft.</p>
+    <p>Für kleine Windanlagen sind Auslastungen von etwa 10 bis 20 % üblich. Werte von 50 %, wie sie manchmal genannt werden, erreicht man im Binnenland praktisch nicht. Den wichtigsten Wert – die Windgeschwindigkeit an Ihrem Standort – finden Sie im Windatlas Ihres Bundeslandes oder durch eine Messung.</p>
+  </div>
+
+  <div class="box">
+    <h3 style="margin:0 0 6px">Gut zu wissen in Sachsen-Anhalt</h3>
+    <p class="note">Ohne Baugenehmigung sind Windanlagen bis 10 m Gesamthöhe und 3 m Rotordurchmesser nur in Gewerbe- und Industriegebieten erlaubt (§ 60 BauO LSA). Im Wohngebiet und im Außenbereich braucht es in der Regel eine Genehmigung. Andere Bundesländer haben eigene Regeln.</p>
+  </div>
+
+  <footer>Demo zur Orientierung, kein Angebot und keine Ertragsgarantie. Annahmen: Rayleigh-Windverteilung, generische Leistungskurve (Anlauf 2,5 m/s, Nennleistung ab 11 m/s, Abschaltung 25 m/s), Höhenkorrektur nach Potenzgesetz, Anschaffung im Mittel ≈ 6.000 € je kW (Marktübersichten 2026), ohne Wartung, Versicherung und Förderung. Gestaltet von Nova|LI.</footer>
+</div>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)};
+  var nf=function(x,d){return x.toLocaleString('de-DE',{minimumFractionDigits:d||0,maximumFractionDigits:d||0})};
+  function cf(vm){ var vin=2.5,vr=11,vout=25,k=Math.PI/(4*vm*vm),E=0,dv=0.05;
+    for(var v=0;v<30;v+=dv){ var p=(Math.PI/2)*v/(vm*vm)*Math.exp(-k*v*v), pw=v>=vin&&v<vr?(Math.pow(v,3)-Math.pow(vin,3))/(Math.pow(vr,3)-Math.pow(vin,3)):(v>=vr&&v<vout?1:0); E+=p*pw*dv; } return E; }
+  function calc(){
+    var P=+$('p').value, v10=+$('v').value, h=+$('h').value, a=+$('g').value, pr=+$('pr').value/100, ev=+$('ev').value/100, fe=+$('fe').value/100, ck=+$('ck').value;
+    $('pO').textContent=nf(P,1)+' kW'; $('vO').textContent=nf(v10,1)+' m/s'; $('hO').textContent=nf(h)+' m'; $('prO').textContent=nf(pr*100,1)+' ct'; $('evO').textContent=nf(ev*100)+' %'; $('feO').textContent=nf(fe*100,1)+' ct'; $('ckO').textContent=nf(ck)+' €';
+    var vh=v10*Math.pow(h/10,a), c=cf(vh), E=P*8760*c, S=E*ev*pr+E*(1-ev)*fe, C=P*ck, pb=S>0?C/S:Infinity;
+    $('rV').textContent=nf(vh,1)+' m/s'; $('rCF').textContent=nf(c*100,1)+' %'; $('rE').textContent=nf(E)+' kWh';
+    $('rS').textContent=nf(S)+' €'; $('rC').textContent=nf(C)+' €';
+    $('rP').textContent=pb>40?'über 40 Jahren – lohnt sich hier nicht':nf(pb,1)+' Jahren';
+  }
+  ['p','v','h','g','pr','ev','fe','ck'].forEach(function(i){$(i).addEventListener('input',calc);$(i).addEventListener('change',calc)});
+  calc();
+})();
+</script>
+</body>
+</html>
