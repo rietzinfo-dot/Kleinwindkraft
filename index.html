@@ -19,7 +19,7 @@ header{background:var(--anth);color:#f4f2ee;padding:28px 0 24px}
 .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
 h1{margin:6px 0 8px;font-size:clamp(26px,5vw,40px);line-height:1.1}
 h2{font-size:20px;margin:28px 0 10px}
-header p{margin:0;color:#e9e4dc;max-width:640px;text-align:justify;hyphens:auto}
+header p{margin:0;color:#e9e4dc;max-width:none;text-align:justify;hyphens:auto}
 .stage{position:relative;margin-top:20px}
 model-viewer{width:100%;height:min(62vh,520px);background:radial-gradient(circle at 50% 40%,#e8f1f4,#cfdde3);border-radius:14px}
 .arbtn{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);background:var(--red);color:#fff;border:0;border-radius:999px;padding:14px 22px;font:600 16px 'IBM Plex Sans',sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.25);cursor:pointer;white-space:nowrap}
@@ -27,7 +27,7 @@ model-viewer{width:100%;height:min(62vh,520px);background:radial-gradient(circle
 model-viewer[ar-status="session-started"] .arui{display:flex}
 .arui button{border:0;border-radius:999px;padding:8px 12px;font:600 13px 'IBM Plex Sans',sans-serif;background:#faf8f4;color:#1f2326;cursor:pointer}.arui button.on{background:var(--red);color:#fff}
 .sizes{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 0}.sizes button{flex:1 1 220px;border:2px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:10px;padding:10px 12px;font:600 15px 'IBM Plex Sans',sans-serif;cursor:pointer;text-align:left}.sizes button small{display:block;font-weight:400;color:var(--mute);font-size:12.5px}.sizes button[aria-pressed=true]{border-color:var(--red);background:var(--anth);color:#faf8f4}.sizes button[aria-pressed=true] small{color:#c9cdd0}
-.hint{font-size:13px;color:var(--mute);margin:8px 2px 0}
+.hint{font-size:13px;color:var(--mute);margin:8px 2px 0;text-align:justify;hyphens:auto}
 .calc{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .ctl{background:var(--paper);border:1px solid var(--rule);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:14px}
 .row label{display:flex;justify-content:space-between;gap:8px;font-size:14px;color:var(--ink2)}
@@ -72,13 +72,13 @@ select{width:100%;padding:8px;border-radius:8px;border:1px solid var(--rule);bac
 .box p,.box li{text-align:justify;hyphens:auto}
 .note{font-size:13px;color:var(--mute);text-align:justify;hyphens:auto}
 table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:6px 4px;border-bottom:1px solid var(--rule);text-align:left}
-footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font-size:12.5px;color:var(--mute)}
+footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font-size:12.5px;color:var(--mute);text-align:justify;hyphens:auto}
 @media (max-width:760px){.calc{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <header><div class="wrap">
-  <div class="eyebrow">Kleinwind · Demo zum Ausprobieren</div>
+  <div class="eyebrow">Kleinwindkraft · Demo zum Ausprobieren</div>
   <h1>KleinwindkraftWerk für Privat und Business</h1>
   <p>Erst als Modell auf Ihren Schreibtisch, dann in Originalgröße in den Außenbereich Ihres Objekts – einfach mit dem Handy. Darunter rechnen Sie selbst, was die Anlage an Ihrem Standort realistisch leistet.</p>
 </div></header>
@@ -108,8 +108,8 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
       <div class="row"><label for="g">Umgebung der Anlage</label>
         <select id="g"><option value="0">offen (Feld, Küste, keine Hindernisse)</option><option value="1" selected>ländlich, vereinzelt Bäume oder Häuser</option><option value="2">Ortsrand, viele Bäume oder Häuser</option></select></div>
       <div class="row"><label for="prn">Ihr Strompreis laut Vertrag (ct je kWh)</label><div class="prline"><input id="pr" type="range" min="15" max="60" step="0.1" value="35" aria-label="Strompreis Regler"><input id="prn" type="number" min="5" max="99" step="0.1" value="35"></div></div>
-      <div class="row"><label for="ev">Davon selbst verbraucht <output id="evO"></output></label><input id="ev" type="range" min="20" max="100" step="5" value="60"></div>
-      <div class="row"><label for="fe">Vergütung für eingespeisten Rest <output id="feO"></output></label><input id="fe" type="range" min="0" max="12" step="0.5" value="7"></div>
+      <div class="row"><label for="ev">Strom Eigenverbrauch <output id="evO"></output></label><input id="ev" type="range" min="20" max="100" step="5" value="60"></div>
+      <div class="row"><label for="fe">Vergütung Stromeinspeisung <output id="feO"></output></label><input id="fe" type="range" min="0" max="12" step="0.5" value="7"></div>
     </div>
     <div class="res">
       <div><small>Wind an der Nabe</small><b id="rV">–</b></div>
@@ -122,7 +122,7 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
   </div>
 
   <div class="box flow">
-    <h3 style="margin:0 0 10px">Wohin geht Ihr Strom?</h3>
+    <h3 style="margin:0 0 10px">Ihr produzierter Strom</h3>
     <div class="fbar"><span id="fbE" class="fe"></span><span id="fbF" class="ff"></span></div>
     <div class="flegend">
       <div><i class="dE"></i><b>Eigenverbrauch</b><span id="flE">–</span></div>
