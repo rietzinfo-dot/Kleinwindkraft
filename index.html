@@ -22,8 +22,9 @@ h2{font-size:20px;margin:28px 0 10px}
 header p{margin:0;color:#e9e4dc;max-width:none;text-align:justify;hyphens:auto}
 .hd{width:fit-content;max-width:100%}.hd p{width:0;min-width:100%}
 .stage{position:relative;margin-top:20px}
-model-viewer{width:100%;height:min(62vh,520px);background:radial-gradient(circle at 50% 35%,#4a7493,#1d3a52);border-radius:14px}
-.arbtn{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);background:var(--red);color:#fff;border:0;border-radius:999px;padding:14px 22px;font:600 16px 'IBM Plex Sans',sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.25);cursor:pointer;white-space:nowrap}
+model-viewer{display:block;width:123.6%;max-width:none;height:min(62vh,520px);background:transparent}
+.stage{overflow:hidden;border-radius:14px;background:radial-gradient(circle at 61.8% 35%,#4a7493,#1d3a52)}
+.arbtn{position:absolute;left:40.45%;bottom:18px;transform:translateX(-50%);background:var(--red);color:#fff;border:0;border-radius:999px;padding:14px 22px;font:600 16px 'IBM Plex Sans',sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.25);cursor:pointer;white-space:nowrap}
 .arui{display:none;position:absolute;top:14px;left:50%;transform:translateX(-50%);gap:6px;align-items:center;background:rgba(31,35,38,.82);color:#faf8f4;border-radius:999px;padding:6px 8px 6px 14px;font:600 14px 'IBM Plex Sans',sans-serif;white-space:nowrap}
 model-viewer[ar-status="session-started"] .arui{display:flex}
 .arui button{border:0;border-radius:999px;padding:8px 12px;font:600 13px 'IBM Plex Sans',sans-serif;background:#faf8f4;color:#1f2326;cursor:pointer}.arui button.on{background:var(--red);color:#fff}
@@ -91,7 +92,7 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
     <p class="st" id="st">Ohne Adresse rechnet der Rechner mit dem Wert, den Sie unten selbst einstellen.</p>
   </div>
   <div class="stage">
-    <model-viewer id="mv" src="kleinwind_real.glb" scale="0.05 0.05 0.05" alt="3D-Modell einer vertikalen Kleinwindanlage mit drehendem Rotor" ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto" camera-controls touch-action="pan-y" autoplay shadow-intensity="1" exposure="1.15" camera-orbit="30deg 76deg 115%" environment-image="neutral">
+    <model-viewer id="mv" max-camera-orbit="auto auto 300%" src="kleinwind_real.glb" scale="0.05 0.05 0.05" alt="3D-Modell einer vertikalen Kleinwindanlage mit drehendem Rotor" ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto" camera-controls touch-action="pan-y" autoplay shadow-intensity="1" exposure="1.15" camera-orbit="30deg 76deg 115%" environment-image="neutral">
       <button slot="ar-button" class="arbtn" id="arb">📱 Mit dem Handy ansehen</button>
       <div class="arui" id="arui"><span id="arLbl">Modell 1 : 20</span><button type="button" id="btT">Tisch-Modell</button><button type="button" id="btO">Originalgröße</button></div>
     </model-viewer>
@@ -186,6 +187,8 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
   $('btT').addEventListener('click',function(e){e.stopPropagation();setScale(false)}); $('btO').addEventListener('click',function(e){e.stopPropagation();setScale(true)});
   $('mv').addEventListener('ar-status',function(e){ if(e.detail.status==='not-presenting'){ setScale(false); } });
   setScale(false);
+  function frame(){ var mv=$('mv'), w=window.innerWidth; mv.cameraOrbit='30deg 76deg '+(w<600?'195%':(w<900?'175%':'150%')); }
+  frame(); window.addEventListener('resize',frame);
   var sel=-1;
   function renderLand(){
     if(sel<0){ $('myLand').innerHTML='<p>Geben Sie oben Ihre Adresse ein – dann sehen Sie hier die Regel für Ihr Bundesland.</p>'; }
