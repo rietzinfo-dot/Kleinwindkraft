@@ -20,6 +20,7 @@ header{background:var(--anth);color:#f4f2ee;padding:28px 0 24px}
 h1{margin:6px 0 8px;font-size:clamp(26px,5vw,40px);line-height:1.1}
 h2{font-size:20px;margin:28px 0 10px}
 header p{margin:0;color:#e9e4dc;max-width:none;text-align:justify;hyphens:auto}
+.hd{width:fit-content;max-width:100%}.hd p{width:0;min-width:100%}
 .stage{position:relative;margin-top:20px}
 model-viewer{width:100%;height:min(62vh,520px);background:radial-gradient(circle at 50% 40%,#e8f1f4,#cfdde3);border-radius:14px}
 .arbtn{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);background:var(--red);color:#fff;border:0;border-radius:999px;padding:14px 22px;font:600 16px 'IBM Plex Sans',sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.25);cursor:pointer;white-space:nowrap}
@@ -77,11 +78,11 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
 </style>
 </head>
 <body>
-<header><div class="wrap">
+<header><div class="wrap"><div class="hd">
   <div class="eyebrow">Kleinwindkraft · Demo zum Ausprobieren</div>
   <h1>KleinwindkraftWerk für Privat und Business</h1>
   <p>Erst als Modell auf Ihren Schreibtisch, dann in Originalgröße in den Außenbereich Ihres Objekts – einfach mit dem Handy. Darunter rechnen Sie selbst, was die Anlage an Ihrem Standort realistisch leistet.</p>
-</div></header>
+</div></div></header>
 
 <div class="wrap">
   <div class="addr">
