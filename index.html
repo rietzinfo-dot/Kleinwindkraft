@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kleinwind im Garten</title>
+<title>KleinwindkraftWerk</title>
 <meta name="description" content="Vertikale Kleinwindanlage per Handy in den eigenen Garten stellen und den realistischen Ertrag selbst berechnen.">
 <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.0.0/dist/model-viewer.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,6 +23,9 @@ header p{margin:0;color:#e9e4dc;max-width:640px;text-align:justify;hyphens:auto}
 .stage{position:relative;margin-top:20px}
 model-viewer{width:100%;height:min(62vh,520px);background:radial-gradient(circle at 50% 40%,#e8f1f4,#cfdde3);border-radius:14px}
 .arbtn{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);background:var(--red);color:#fff;border:0;border-radius:999px;padding:14px 22px;font:600 16px 'IBM Plex Sans',sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.25);cursor:pointer;white-space:nowrap}
+.arui{display:none;position:absolute;top:14px;left:50%;transform:translateX(-50%);gap:6px;align-items:center;background:rgba(31,35,38,.82);color:#faf8f4;border-radius:999px;padding:6px 8px 6px 14px;font:600 14px 'IBM Plex Sans',sans-serif;white-space:nowrap}
+model-viewer[ar-status="session-started"] .arui{display:flex}
+.arui button{border:0;border-radius:999px;padding:8px 12px;font:600 13px 'IBM Plex Sans',sans-serif;background:#faf8f4;color:#1f2326;cursor:pointer}.arui button.on{background:var(--red);color:#fff}
 .sizes{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 0}.sizes button{flex:1 1 220px;border:2px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:10px;padding:10px 12px;font:600 15px 'IBM Plex Sans',sans-serif;cursor:pointer;text-align:left}.sizes button small{display:block;font-weight:400;color:var(--mute);font-size:12.5px}.sizes button[aria-pressed=true]{border-color:var(--red);background:var(--anth);color:#faf8f4}.sizes button[aria-pressed=true] small{color:#c9cdd0}
 .hint{font-size:13px;color:var(--mute);margin:8px 2px 0}
 .calc{display:grid;grid-template-columns:1fr 1fr;gap:18px}
@@ -44,6 +47,13 @@ select{width:100%;padding:8px;border-radius:8px;border:1px solid var(--rule);bac
 .addr .st{font-size:13px;color:#c9cdd0;margin:8px 0 0}
 .mode{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;background:var(--red);color:#fff;margin-left:6px}
 .prline{display:flex;gap:8px;align-items:center}.prline input[type=number]{width:90px;padding:6px 8px;border-radius:8px;border:1px solid var(--rule);background:var(--paper);color:var(--ink);font:inherit}
+.fold2 summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:baseline;gap:10px}.fold2 summary::-webkit-details-marker{display:none}.fold2 summary h3::before{content:'▸ ';color:var(--red)}.fold2[open] summary h3::before{content:'▾ '}.fold2 .fh{font-size:13px;color:var(--mute)}.fold2[open] .fh{display:none}
+.fbar{display:flex;height:30px;border-radius:8px;overflow:hidden;background:var(--rule)}
+.fbar span{display:block;height:100%;transition:width .3s}.fe,.dE{background:var(--ok)}.ff,.dF{background:var(--red)}.dT{background:var(--anth)}
+.flegend{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px;font-size:14px}
+.flegend div{display:flex;flex-direction:column}.flegend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:middle}
+.flegend span{color:var(--ink2);font-variant-numeric:tabular-nums}
+@media (max-width:600px){.flegend{grid-template-columns:1fr}}
 .mean dt{font-weight:600;margin-top:8px}.mean dd{margin:2px 0 0;text-align:justify;hyphens:auto;color:var(--ink2)}
 .gw{display:flex;align-items:center;gap:12px;cursor:pointer;font-weight:600;font-size:17px}
 .gw input{width:22px;height:22px;accent-color:var(--red);flex:none}
@@ -69,8 +79,8 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
 <body>
 <header><div class="wrap">
   <div class="eyebrow">Kleinwind · Demo zum Ausprobieren</div>
-  <h1>Kleinwind im eigenen Garten</h1>
-  <p>Stellen Sie die Anlage mit dem Handy in Originalgröße in Ihren Garten – oder als kleines Modell auf den Tisch. Darunter rechnen Sie selbst, was sie an Ihrem Standort realistisch bringt.</p>
+  <h1>KleinwindkraftWerk für Privat und Business</h1>
+  <p>Erst als Modell auf Ihren Schreibtisch, dann in Originalgröße in den Außenbereich Ihres Objekts – einfach mit dem Handy. Darunter rechnen Sie selbst, was die Anlage an Ihrem Standort realistisch leistet.</p>
 </div></header>
 
 <div class="wrap">
@@ -79,30 +89,27 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
     <div class="line"><input id="adr" type="text" placeholder="z. B. Hauptstraße 1, 06456 Arnstein" autocomplete="street-address"><button id="go" type="button">Winddaten laden</button></div>
     <p class="st" id="st">Ohne Adresse rechnet der Rechner mit dem Wert, den Sie unten selbst einstellen.</p>
   </div>
-  <div class="sizes" role="group" aria-label="Größe wählen">
-    <button type="button" id="szG" aria-pressed="true">🌳 Originalgröße im Garten <small>9,35 m hoch</small></button>
-    <button type="button" id="szT" aria-pressed="false">🪑 Modell für den Tisch <small>1 : 20, 47 cm</small></button>
-  </div>
   <div class="stage">
-    <model-viewer id="mv" src="kleinwind_garten.glb" data-garden="kleinwind_garten.glb" data-table="kleinwind.glb" alt="3D-Modell einer vertikalen Kleinwindanlage mit drehendem Rotor" ar ar-modes="webxr scene-viewer quick-look" ar-scale="fixed" camera-controls touch-action="pan-y" autoplay shadow-intensity="1" exposure="1.05" camera-orbit="30deg 76deg 115%" environment-image="neutral">
-      <button slot="ar-button" class="arbtn" id="arb">📱 In den Garten stellen</button>
+    <model-viewer id="mv" src="kleinwind_garten.glb" scale="0.05 0.05 0.05" alt="3D-Modell einer vertikalen Kleinwindanlage mit drehendem Rotor" ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto" camera-controls touch-action="pan-y" autoplay shadow-intensity="1" exposure="1.05" camera-orbit="30deg 76deg 115%" environment-image="neutral">
+      <button slot="ar-button" class="arbtn" id="arb">📱 Mit dem Handy ansehen</button>
+      <div class="arui" id="arui"><span id="arLbl">Modell 1 : 20</span><button type="button" id="btT">Tisch-Modell</button><button type="button" id="btO">Originalgröße</button></div>
     </model-viewer>
   </div>
-  <p class="hint" id="szHint">Originalgröße: Mast 6 m, Rotor 3 m hoch und 3 m breit, gesamt 9,35 m. Im Garten nach dem Antippen einige Schritte zurückgehen, um die ganze Anlage zu sehen.</p>
+  <p class="hint">So geht es: Auf „Mit dem Handy ansehen“ tippen – die Anlage erscheint zuerst als Modell (1 : 20, 47 cm) auf Tisch oder Boden. Mit zwei Fingern größer oder kleiner ziehen; ein Tipp auf „Originalgröße“ zeigt sie in echter Größe (Mast 6 m, Rotor 3 × 3 m, gesamt 9,35 m) – dafür ins Freie gehen und einige Schritte zurücktreten.</p>
 
-  <h2>2. Was bringt sie bei mir? <span class="mode" id="mode">eigene Eingabe</span></h2>
+  <h2>2. Was Ihr KleinwindkraftWerk leistet <span class="mode" id="mode">eigene Eingabe</span></h2>
   <div class="calc">
     <div class="ctl">
       <div class="row"><label for="p">Anlagengröße <output id="pO"></output></label>
         <select id="p"><option value="1.5">1,5 kW</option><option value="2.5">2,5 kW</option><option value="3.5" selected>3,5 kW</option><option value="4.5">4,5 kW</option><option value="6">6 kW</option><option value="10">10 kW</option></select></div>
       <div class="row"><label for="v">Mittlere Windgeschwindigkeit in 10 m Höhe <output id="vO"></output></label><input id="v" type="range" min="2.5" max="7" step="0.1" value="4"></div>
       <div class="row"><label for="h">Masthöhe (Nabe) <output id="hO"></output></label><input id="h" type="range" min="6" max="20" step="1" value="10"></div>
+      <div class="row"><label for="ck">Anschaffung je kW <output id="ckO"></output></label><input id="ck" type="range" min="3000" max="9000" step="250" value="6000"></div>
       <div class="row"><label for="g">Umgebung der Anlage</label>
         <select id="g"><option value="0">offen (Feld, Küste, keine Hindernisse)</option><option value="1" selected>ländlich, vereinzelt Bäume oder Häuser</option><option value="2">Ortsrand, viele Bäume oder Häuser</option></select></div>
       <div class="row"><label for="prn">Ihr Strompreis laut Vertrag (ct je kWh)</label><div class="prline"><input id="pr" type="range" min="15" max="60" step="0.1" value="35" aria-label="Strompreis Regler"><input id="prn" type="number" min="5" max="99" step="0.1" value="35"></div></div>
       <div class="row"><label for="ev">Davon selbst verbraucht <output id="evO"></output></label><input id="ev" type="range" min="20" max="100" step="5" value="60"></div>
       <div class="row"><label for="fe">Vergütung für eingespeisten Rest <output id="feO"></output></label><input id="fe" type="range" min="0" max="12" step="0.5" value="7"></div>
-      <div class="row"><label for="ck">Anschaffung je kW <output id="ckO"></output></label><input id="ck" type="range" min="3000" max="9000" step="250" value="6000"></div>
     </div>
     <div class="res">
       <div><small>Wind an der Nabe</small><b id="rV">–</b></div>
@@ -114,8 +121,22 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
     </div>
   </div>
 
-  <div class="box">
-    <h3 style="margin:0 0 6px">Was die Zahlen bedeuten</h3>
+  <div class="box flow">
+    <h3 style="margin:0 0 10px">Wohin geht Ihr Strom?</h3>
+    <div class="fbar"><span id="fbE" class="fe"></span><span id="fbF" class="ff"></span></div>
+    <div class="flegend">
+      <div><i class="dE"></i><b>Eigenverbrauch</b><span id="flE">–</span></div>
+      <div><i class="dF"></i><b>Einspeisung</b><span id="flF">–</span></div>
+      <div><i class="dT"></i><b>Stromerzeugung gesamt</b><span id="flT">–</span></div>
+    </div>
+    <div id="monthBox" hidden>
+      <h4 style="margin:16px 0 6px;font-size:15px">Erzeugung im Jahresverlauf <small style="font-weight:400;color:var(--mute)">(Durchschnitt 2023–2025 an Ihrem Standort)</small></h4>
+      <svg id="mChart" viewBox="0 0 600 200" width="100%" role="img" aria-label="Monatliche Stromerzeugung"></svg>
+    </div>
+  </div>
+
+  <details class="box fold2">
+    <summary><h3 style="margin:0;display:inline">Was die Zahlen bedeuten</h3><span class="fh">aufklappen</span></summary>
     <dl class="mean">
       <dt>Wind an der Nabe</dt><dd>Die durchschnittliche Windgeschwindigkeit in der Höhe, in der sich der Rotor dreht. Je höher der Mast, desto stärker der Wind – Bäume und Häuser in der Nähe bremsen ihn.</dd>
       <dt>Auslastung</dt><dd>Wie viel Prozent des Jahres die Anlage umgerechnet mit voller Kraft läuft. Für kleine Windanlagen sind etwa 10 bis 20 % üblich, an sehr windigen Standorten mehr. Werte um 50 % werden im Binnenland praktisch nicht erreicht.</dd>
@@ -125,7 +146,7 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
       <dt>Amortisiert nach</dt><dd>Nach so vielen Jahren hat die Ersparnis die Anschaffung wieder eingespielt. Alles danach ist Gewinn – solange die Anlage läuft.</dd>
     </dl>
     <p class="note" id="srcNote">So wird gerechnet: Mit Adresse nutzt der Rechner die stündlichen Winddaten der Jahre 2023 bis 2025 an Ihrem Standort (in 10 m und 100 m Höhe) und rechnet sie auf Ihre Masthöhe um. Ohne Adresse verteilt er Ihren eingestellten Mittelwert so, wie Wind in Deutschland typischerweise weht. In beiden Fällen gilt eine typische Leistungskurve: Anlauf ab 2,5 m/s, volle Leistung ab 11 m/s.</p>
-  </div>
+  </details>
 
   <div class="box land">
     <label class="gw"><input type="checkbox" id="gwChk"> <span>Gut zu wissen: Ohne Baugenehmigung erlaubt?</span></label>
@@ -160,11 +181,10 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
    ['Schleswig-Holstein','Verfahrensfrei freistehend bis 15 m Gesamthöhe, u. a. in Dorf-, Kern-, Gewerbe- und Industriegebieten und im Außenbereich, nicht in Schutzgebieten (LBO § 61 Nr. 3 c, seit 05.07.2024).'],
    ['Thüringen','Verfahrensfrei bis 10 m Höhe und bis 3 m Rotordurchmesser, nicht in reinen Wohngebieten und Schutzgebieten im Außenbereich (ThürBO § 63 Abs. 1 Nr. 3 d).']
   ];
-  function size(g){ var mv=$('mv'); mv.src=g?mv.dataset.garden:mv.dataset.table; mv.setAttribute('ar-scale',g?'fixed':'auto');
-    $('szG').setAttribute('aria-pressed',g); $('szT').setAttribute('aria-pressed',!g);
-    $('arb').textContent=g?'📱 In den Garten stellen':'📱 Auf den Tisch stellen';
-    $('szHint').textContent=g?'Originalgröße: Mast 6 m, Rotor 3 m hoch und 3 m breit, gesamt 9,35 m. Im Garten nach dem Antippen einige Schritte zurückgehen, um die ganze Anlage zu sehen.':'Tisch-Modell im Maßstab 1:20, etwa 47 cm hoch – zum Zeigen und Erklären. Mit zwei Fingern lässt es sich größer oder kleiner ziehen.'; }
-  $('szG').addEventListener('click',function(){size(true)}); $('szT').addEventListener('click',function(){size(false)});
+  function setScale(o){ var mv=$('mv'); mv.setAttribute('scale',o?'1 1 1':'0.05 0.05 0.05'); $('arLbl').textContent=o?'Originalgröße 1 : 1':'Modell 1 : 20'; $('btO').classList.toggle('on',o); $('btT').classList.toggle('on',!o); }
+  $('btT').addEventListener('click',function(e){e.stopPropagation();setScale(false)}); $('btO').addEventListener('click',function(e){e.stopPropagation();setScale(true)});
+  $('mv').addEventListener('ar-status',function(e){ if(e.detail.status==='not-presenting'){ setScale(false); } });
+  setScale(false);
   var sel=-1;
   function renderLand(){
     if(sel<0){ $('myLand').innerHTML='<p>Geben Sie oben Ihre Adresse ein – dann sehen Sie hier die Regel für Ihr Bundesland.</p>'; }
@@ -179,20 +199,38 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
   var DATA=null; // {w10:[],w100:[]}
   function pc(v){ var vin=2.5,vr=11,vout=25; if(v<vin||v>=vout) return 0; if(v>=vr) return 1; return (v*v*v-vin*vin*vin)/(vr*vr*vr-vin*vin*vin); }
   function cfRay(vm){ var k=Math.PI/(4*vm*vm),E=0,dv=0.05; for(var v=0;v<30;v+=dv){ E+=(Math.PI/2)*v/(vm*vm)*Math.exp(-k*v*v)*pc(v)*dv; } return E; }
+  function drawMonths(m,ev){
+    var W=600,H=200,L=40,B=24,T=10,mx=Math.max.apply(null,m)||1, bw=(W-L-10)/12, M=['J','F','M','A','M','J','J','A','S','O','N','D'], s='';
+    var cs=getComputedStyle(document.documentElement), col=function(n){return cs.getPropertyValue(n).trim()};
+    for(var g=0;g<=2;g++){ var v=mx*g/2, y=H-B-(H-B-T)*g/2; s+='<line x1="'+L+'" x2="'+(W-6)+'" y1="'+y+'" y2="'+y+'" stroke="'+col('--rule')+'"/><text x="'+(L-6)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" fill="'+col('--mute')+'">'+Math.round(v)+'</text>'; }
+    m.forEach(function(v,i){ var h=(H-B-T)*v/mx, x=L+i*bw+3, y=H-B-h, he=h*ev;
+      s+='<rect x="'+x+'" y="'+(y+h-he)+'" width="'+(bw-6)+'" height="'+he+'" fill="'+col('--ok')+'" rx="2"/>';
+      s+='<rect x="'+x+'" y="'+y+'" width="'+(bw-6)+'" height="'+(h-he)+'" fill="'+col('--red')+'" rx="2"/>';
+      s+='<text x="'+(x+(bw-6)/2)+'" y="'+(H-8)+'" text-anchor="middle" font-size="11" fill="'+col('--mute')+'">'+M[i]+'</text>'; });
+    s+='<text x="'+(W-6)+'" y="'+(T+2)+'" text-anchor="end" font-size="10" fill="'+col('--mute')+'">kWh je Monat · grün = Eigenverbrauch, rot = Einspeisung</text>';
+    $('mChart').innerHTML=s;
+  }
   function calc(){
     var P=+$('p').value, v10=+$('v').value, h=+$('h').value, env=ENV[+$('g').value], pr=(+$('prn').value||0)/100, ev=+$('ev').value/100, fe=+$('fe').value/100, ck=+$('ck').value;
     $('pO').textContent=nf(P,1)+' kW'; $('vO').textContent=nf(v10,1)+' m/s'; $('hO').textContent=nf(h)+' m'; $('evO').textContent=nf(ev*100)+' %'; $('feO').textContent=nf(fe*100,1)+' ct'; $('ckO').textContent=nf(ck)+' €';
     var c, vh;
-    if(DATA){ var sum=0,sv=0,n=0;
+    var mon=null;
+    if(DATA){ var sum=0,sv=0,n=0; mon=[0,0,0,0,0,0,0,0,0,0,0,0];
       for(var i=0;i<DATA.w10.length;i++){ var a=DATA.w10[i], b=DATA.w100[i]; if(a==null||b==null) continue;
         var al=(a>0.3&&b>0.3)?Math.log(b/a)/Math.log(10):0.2; al=Math.max(0,Math.min(0.6,al));
-        var vv=a*Math.pow(h/10,al)*env.f; sum+=pc(vv); sv+=vv; n++; }
-      c=n?sum/n:0; vh=n?sv/n:0;
+        var vv=a*Math.pow(h/10,al)*env.f, p=pc(vv); sum+=p; sv+=vv; n++; if(DATA.t){ mon[+DATA.t[i].substr(5,2)-1]+=p; } }
+      c=n?sum/n:0; vh=n?sv/n:0; var yrs=n/8760; mon=mon.map(function(x){return x*P/yrs;});
     } else { vh=v10*Math.pow(h/10,env.a); c=cfRay(vh); }
     var E=P*8760*c, S=E*ev*pr+E*(1-ev)*fe, C=P*ck, pb=S>0?C/S:Infinity;
     var mv=$('mv'); if(mv){ mv.timeScale = vh<2.5?0.15:Math.min(3,vh/4); }
     $('rV').textContent=nf(vh,1)+' m/s'; $('rCF').textContent=nf(c*100,1)+' %'; $('rE').textContent=nf(E)+' kWh';
     $('rS').textContent=nf(S)+' €'; $('rC').textContent=nf(C)+' €';
+    var eE=E*ev, eF=E*(1-ev);
+    $('fbE').style.width=(ev*100)+'%'; $('fbF').style.width=((1-ev)*100)+'%';
+    $('flE').textContent=nf(eE)+' kWh ('+nf(ev*100)+' %) · spart '+nf(eE*pr)+' €';
+    $('flF').textContent=nf(eF)+' kWh ('+nf((1-ev)*100)+' %) · bringt '+nf(eF*fe)+' €';
+    $('flT').textContent=nf(E)+' kWh · '+nf(S)+' € im Jahr';
+    $('monthBox').hidden=!mon; if(mon) drawMonths(mon,ev);
     $('rP').textContent=pb>40?'über 40 Jahren – lohnt sich hier nicht':nf(pb,1)+' Jahren';
     $('mode').textContent=DATA?'Winddaten Ihres Standorts':'eigene Eingabe';
   }
@@ -204,19 +242,25 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
     var q=$('adr').value.trim(); if(!q){ $('st').textContent='Bitte eine Adresse eingeben.'; return; }
     $('st').textContent='Suche Adresse …';
     try{
-      var r=await fetch('https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=1&countrycodes=de&q='+encodeURIComponent(q));
-      var g=await r.json(); if(!g.length){ $('st').textContent='Adresse nicht gefunden. Bitte mit Postleitzahl und Ort versuchen.'; return; }
+      // Mehrere Versuche: ganze Adresse → ohne Hausnummer → nur Postleitzahl und Ort → nur Ort
+      var tries=[q, q.replace(/\b\d+\s*[a-zA-Z]?\b(?=[^\d]*\b\d{5}\b)/,'').replace(/\s+/g,' ').trim()];
+      var pm=q.match(/\b(\d{5})\b\s*(.*)$/); if(pm){ tries.push(pm[1]+' '+pm[2]); if(pm[2]) tries.push(pm[2]); }
+      var g=[];
+      for(var t=0;t<tries.length&&!g.length;t++){ if(!tries[t]) continue;
+        var r=await fetch('https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=1&countrycodes=de&q='+encodeURIComponent(tries[t]));
+        g=await r.json(); }
+      if(!g.length){ $('st').textContent='Adresse nicht gefunden. Bitte Straße, Postleitzahl und Ort prüfen – oder nur Postleitzahl und Ort eingeben.'; return; }
       var lat=(+g[0].lat).toFixed(4), lon=(+g[0].lon).toFixed(4), st=(g[0].address&&g[0].address.state)||'';
       $('st').textContent='Gefunden: '+g[0].display_name.split(',').slice(0,4).join(',')+' – lade Winddaten 2023–2025 …';
       var w=await fetch('https://archive-api.open-meteo.com/v1/archive?latitude='+lat+'&longitude='+lon+'&start_date=2023-01-01&end_date=2025-12-31&hourly=wind_speed_10m,wind_speed_100m&wind_speed_unit=ms');
       var d=await w.json(); if(!d.hourly){ throw new Error('keine Winddaten'); }
-      DATA={w10:d.hourly.wind_speed_10m,w100:d.hourly.wind_speed_100m};
+      DATA={w10:d.hourly.wind_speed_10m,w100:d.hourly.wind_speed_100m,t:d.hourly.time};
       var m=0,n=0; DATA.w10.forEach(function(x){ if(x!=null){m+=x;n++;} }); m=m/n;
       $('v').value=Math.max(2.5,Math.min(7,m)).toFixed(1);
       var i=LAND.findIndex(function(l){return l[0]===st}); if(i>=0) pick(i);
       $('st').textContent='Winddaten geladen: Ø '+nf(m,1)+' m/s in 10 m Höhe ('+nf(n)+' Stundenwerte 2023–2025, ERA5/Copernicus).'+(st?' Bundesland: '+st+'.':'');
       calc();
-    }catch(e){ $('st').textContent='Die Winddaten konnten gerade nicht geladen werden ('+e.message+'). Bitte später erneut versuchen oder den Wind unten selbst einstellen.'; }
+    }catch(e){ $('st').textContent=(location.hostname.indexOf('claude')>=0||location.protocol==='data:'||/Failed to fetch|NetworkError/i.test(e.message))?'Die Verbindung zu den Wetter- und Kartendiensten ist hier gesperrt (Vorschau). Auf der eigenen Webseite rietzinfo-dot.github.io/Kleinwindkraft funktioniert die Adresssuche. Den Wind können Sie unten auch selbst einstellen.':'Die Winddaten konnten gerade nicht geladen werden ('+e.message+'). Bitte später erneut versuchen oder den Wind unten selbst einstellen.'; }
   }
   $('go').addEventListener('click',load);
   $('adr').addEventListener('keydown',function(e){ if(e.key==='Enter') load(); });
