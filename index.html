@@ -3,7 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>KleinwindkraftWerk</title>
+<title>Dein KleinwindkraftWerk</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#383e42">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="KleinwindkraftWerk">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="description" content="Vertikale Kleinwindanlage per Handy in den eigenen Garten stellen und den realistischen Ertrag selbst berechnen.">
 <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.0.0/dist/model-viewer.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +28,13 @@ header{background:var(--anth);color:#f4f2ee;padding:28px 0 24px}
 h1{margin:6px 0 8px;font-size:clamp(26px,5vw,40px);line-height:1.1}
 h2{font-size:20px;margin:28px 0 10px}
 header p{margin:0;color:#e9e4dc;max-width:none;text-align:justify;hyphens:auto}
-.hd{width:fit-content;max-width:100%}.hd p{width:0;min-width:100%}
+.hd{width:fit-content;max-width:100%}
+.instbtn{margin-top:14px;background:var(--red);color:#fff;border:0;border-radius:999px;padding:11px 18px;font:600 15px 'IBM Plex Sans',sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.ihelp{position:fixed;inset:0;background:rgba(15,20,24,.6);display:flex;align-items:flex-end;justify-content:center;z-index:50;padding:16px}
+.ihelp[hidden]{display:none}
+.ibox{background:var(--paper);color:var(--ink);border-radius:16px;padding:18px 20px;max-width:440px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.35)}
+.ibox h3{margin:0 0 8px}.ibox ol{margin:0 0 12px;padding-left:1.2em}.ibox li{margin:4px 0}
+.ibox button{background:var(--anth);color:#fff;border:0;border-radius:999px;padding:10px 16px;font:600 14px 'IBM Plex Sans',sans-serif;cursor:pointer}.hd p{width:0;min-width:100%}
 .stage{position:relative;margin-top:20px}
 model-viewer{display:block;width:123.6%;max-width:none;height:min(62vh,520px);background:transparent}
 .stage{overflow:hidden;border-radius:14px;background:radial-gradient(circle at 61.8% 35%,#4a7493,#1d3a52)}
@@ -83,7 +97,13 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
   <div class="eyebrow">Kleinwindkraft · Demo zum Ausprobieren</div>
   <h1>KleinwindkraftWerk für Privat und Business</h1>
   <p>Erst als Modell auf Ihren Schreibtisch, dann in Originalgröße in den Außenbereich Ihres Objekts – einfach mit dem Handy. Darunter rechnen Sie selbst, was die Anlage an Ihrem Standort realistisch leistet.</p>
+  <button type="button" id="inst" class="instbtn">📲 Als App installieren</button>
 </div></div></header>
+<div class="ihelp" id="ihelp" hidden role="dialog" aria-labelledby="ihT"><div class="ibox">
+  <h3 id="ihT">Als App auf dem Startbildschirm</h3>
+  <div id="ihBody"></div>
+  <button type="button" id="ihClose">Verstanden</button>
+</div></div>
 
 <div class="wrap">
   <div class="addr">
@@ -187,6 +207,22 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
   $('btT').addEventListener('click',function(e){e.stopPropagation();setScale(false)}); $('btO').addEventListener('click',function(e){e.stopPropagation();setScale(true)});
   $('mv').addEventListener('ar-status',function(e){ if(e.detail.status==='not-presenting'){ setScale(false); } });
   setScale(false);
+  // ---- Als App installieren ----
+  var deferred=null, inst=$('inst');
+  var standalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+  if(standalone) inst.hidden=true;
+  window.addEventListener('beforeinstallprompt',function(e){ e.preventDefault(); deferred=e; inst.hidden=false; });
+  window.addEventListener('appinstalled',function(){ inst.hidden=true; deferred=null; });
+  function help(html){ $('ihBody').innerHTML=html; $('ihelp').hidden=false; }
+  $('ihClose').addEventListener('click',function(){ $('ihelp').hidden=true; });
+  inst.addEventListener('click',async function(){
+    if(deferred){ deferred.prompt(); var r=await deferred.userChoice; if(r&&r.outcome==='accepted'){ inst.hidden=true; } deferred=null; return; }
+    var ua=navigator.userAgent;
+    if(/iPhone|iPad|iPod/.test(ua)){ help('<ol><li>Unten in Safari auf <b>Teilen</b> tippen (Quadrat mit Pfeil nach oben).</li><li><b>„Zum Home-Bildschirm“</b> wählen.</li><li>Oben rechts <b>„Hinzufügen“</b> tippen – fertig.</li></ol><p class="note">Apple erlaubt auf dem iPhone keine Installation per Knopf, deshalb diese drei Schritte.</p>'); }
+    else if(/Android/.test(ua)){ help('<ol><li>Oben rechts im Browser auf <b>⋮</b> tippen.</li><li><b>„App installieren“</b> oder <b>„Zum Startbildschirm hinzufügen“</b> wählen.</li></ol><p class="note">Falls kein Installationsfenster kam: Die Seite einmal neu laden und den Knopf erneut drücken.</p>'); }
+    else { help('<ol><li>In Chrome oder Edge rechts in der Adresszeile auf das <b>Installieren-Symbol</b> (Bildschirm mit Pfeil) klicken.</li><li>Oder im Browsermenü <b>„App installieren“</b> wählen.</li></ol><p class="note">Am besten funktioniert die App auf dem Handy – dort auch mit Kamera im Garten.</p>'); }
+  });
+  if('serviceWorker' in navigator && location.protocol==='https:'){ navigator.serviceWorker.register('sw.js').catch(function(){}); }
   function frame(){ var mv=$('mv'), w=window.innerWidth; mv.cameraOrbit='30deg 76deg '+(w<600?'195%':(w<900?'175%':'150%')); }
   frame(); window.addEventListener('resize',frame);
   var sel=-1;
