@@ -1,6 +1,6 @@
-// Dein KleinwindkraftWerk – Offline-Speicher für Seite, 3D-Modell und Bibliothek
-const CACHE = 'kleinwind-v1';
-const CORE = ['./', './index.html', './kleinwind_real.glb', './manifest.webmanifest', './icon-192.png', './icon-512.png',
+// KleinWindKraftCheck – Offline-Speicher für Seite, 3D-Modell und Bibliothek
+const CACHE = 'kleinwind-v2';
+const CORE = ['./', './index.html', './kleinwind_werbung_beides.glb', './marco.png', './manifest.webmanifest', './icon-192.png', './icon-512.png',
   'https://cdn.jsdelivr.net/npm/@google/model-viewer@4.0.0/dist/model-viewer.min.js'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => Promise.all(CORE.map(u => c.add(u).catch(() => null)))).then(() => self.skipWaiting()));

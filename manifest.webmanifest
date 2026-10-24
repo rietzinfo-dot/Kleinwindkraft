@@ -1,7 +1,7 @@
 {
-  "name": "Dein KleinwindkraftWerk",
-  "short_name": "KleinwindkraftWerk",
-  "description": "Vertikale Kleinwindanlage per Handy in Originalgröße ansehen und den realistischen Ertrag am eigenen Standort berechnen.",
+  "name": "KleinWindKraftCheck",
+  "short_name": "KleinWindKraftCheck",
+  "description": "Kleines Windrad per Handy in Originalgröße ansehen und mit echten Winddaten nachrechnen, ob es sich lohnt.",
   "lang": "de",
   "start_url": "./",
   "scope": "./",
