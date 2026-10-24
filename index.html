@@ -12,7 +12,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="KleinWindKraftCheck">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="description" content="Ein kleines Windrad im Garten – rechnet sich das? Anlage per Handy in Originalgröße ansehen und mit echten Winddaten selbst nachrechnen. Ein Aufklärungs-Spielzeug von Nova|LI.">
+<meta name="description" content="Ein Windrad im Garten! Anlage per Handy in Originalgröße ansehen und mit echten Winddaten durchspielen. Ein Spielzeug von Nova|LI.">
 <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.0.0/dist/model-viewer.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
@@ -28,7 +28,7 @@ header{background:var(--anth);color:#f4f2ee;padding:28px 0 24px}
 h1{margin:6px 0 8px;font-size:clamp(26px,5vw,40px);line-height:1.1}
 h2{font-size:20px;margin:28px 0 10px}
 header p{margin:0;color:#e9e4dc;max-width:none;text-align:justify;hyphens:auto}
-.hd{width:fit-content;max-width:100%}
+.hd{max-width:100%}
 .instbtn{margin-top:14px;background:var(--red);color:#fff;border:0;border-radius:999px;padding:11px 18px;font:600 15px 'IBM Plex Sans',sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25)}
 .ihelp{position:fixed;inset:0;background:rgba(15,20,24,.6);display:flex;align-items:flex-end;justify-content:center;z-index:50;padding:16px}
 .ihelp[hidden]{display:none}
@@ -87,7 +87,8 @@ select{width:100%;padding:8px;border-radius:8px;border:1px solid var(--rule);bac
 .who{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:12px}.who img{border-radius:50%;flex:none}.who p{margin:0;text-align:left}.who a{color:var(--red)}
 .verdict{margin:14px 0 0;padding:14px 16px;border-radius:10px;border-left:6px solid var(--red);background:var(--paper);border-top:1px solid var(--rule);border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}.verdict b{display:block;font-size:17px;margin-bottom:4px}.verdict p{margin:0;color:var(--ink2);text-align:justify;hyphens:auto}.verdict.ok{border-left-color:var(--ok)}
 .box{background:var(--paper);border:1px solid var(--rule);border-radius:12px;padding:16px 18px;margin:18px 0}
-.box p,.box li{text-align:justify;hyphens:auto}
+.box p,.box li,.hint,.st,.verdict p,footer,dd,.ibox li,.ibox p{text-align:justify;hyphens:auto;-webkit-hyphens:auto;overflow-wrap:break-word}
+@media (max-width:600px){header p,.hint,.verdict p,footer,dd,.box p{hyphens:auto;word-spacing:-.02em}}
 .note{font-size:13px;color:var(--mute);text-align:justify;hyphens:auto}
 table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:6px 4px;border-bottom:1px solid var(--rule);text-align:left}
 footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font-size:12.5px;color:var(--mute);text-align:justify;hyphens:auto}
@@ -97,8 +98,8 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
 <body>
 <header><div class="wrap"><div class="hd">
   <div class="eyebrow" style="text-transform:none;font-size:14px">KleinWindKraftCheck</div>
-  <h1>Lohnt sich ein Windrad im Garten?</h1>
-  <p>Kleine Windräder sehen gut aus und versprechen eigenen Strom. Ob sie sich rechnen, hängt fast nur am Wind – und der weht im Binnenland meist schwächer, als man denkt. Stellen Sie die Anlage per Handy auf Ihren Tisch oder in Originalgröße in den Garten und rechnen Sie mit den echten Winddaten Ihres Standorts selbst nach.</p>
+  <h1>Ein Windrad im Garten!</h1>
+  <p>Stell das Windrad per Handy erst als Modell auf deinen Tisch, dann in Originalgröße in deinen Garten. Lade die echten Winddaten deines Standorts und spiel an den Reglern: Was würde das Windrad bei dir an Strom erzeugen?</p>
   <button type="button" id="inst" class="instbtn">📲 Als App installieren</button>
 </div></div></header>
 <div class="ihelp" id="ihelp" hidden role="dialog" aria-labelledby="ihT"><div class="ibox">
@@ -109,9 +110,9 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
 
 <div class="wrap">
   <div class="addr">
-    <label for="adr">1. Ihre Adresse – wir holen die offiziellen Winddaten für Ihren Standort</label>
+    <label for="adr">1. Deine Adresse – wir holen die offiziellen Winddaten für deinen Standort</label>
     <div class="line"><input id="adr" type="text" placeholder="z. B. Hauptstraße 1, 06456 Arnstein" autocomplete="street-address"><button id="go" type="button">Winddaten laden</button></div>
-    <p class="st" id="st">Ohne Adresse rechnet der Rechner mit dem Wert, den Sie unten selbst einstellen.</p>
+    <p class="st" id="st">Ohne Adresse rechnet der Rechner mit dem Wert, den du unten selbst einstellst.</p>
   </div>
   <div class="stage">
     <model-viewer id="mv" max-camera-orbit="auto auto 300%" src="kleinwind_werbung_beides.glb" scale="0.05 0.05 0.05" alt="3D-Modell einer vertikalen Kleinwindanlage mit Nova|LI-Schriftzug und drehendem Rotor" ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto" camera-controls touch-action="pan-y" autoplay shadow-intensity="1" exposure="1.15" camera-orbit="30deg 76deg 115%" environment-image="neutral">
@@ -121,7 +122,7 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
   </div>
   <p class="hint">So geht es: Auf „Mit dem Handy ansehen“ tippen – die Anlage erscheint zuerst als Modell (1 : 20, 47 cm) auf Tisch oder Boden. Mit zwei Fingern größer oder kleiner ziehen; ein Tipp auf „Originalgröße“ zeigt sie in echter Größe (Mast 6 m, Rotor 3 × 3 m, gesamt 9,35 m) – dafür ins Freie gehen und einige Schritte zurücktreten.</p>
 
-  <h2>2. Was das Windrad an Ihrem Standort leistet <span class="mode" id="mode">eigene Eingabe</span></h2>
+  <h2>2. Was das Windrad bei dir an Strom erzeugt <span class="mode" id="mode">eigene Eingabe</span></h2>
   <div class="calc">
     <div class="ctl">
       <div class="row"><label for="p">Anlagengröße <output id="pO"></output></label>
@@ -131,7 +132,7 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
       <div class="row"><label for="ck">Anschaffung je kW <output id="ckO"></output></label><input id="ck" type="range" min="3000" max="9000" step="250" value="6000"></div>
       <div class="row"><label for="g">Umgebung der Anlage</label>
         <select id="g"><option value="0">offen (Feld, Küste, keine Hindernisse)</option><option value="1" selected>ländlich, vereinzelt Bäume oder Häuser</option><option value="2">Ortsrand, viele Bäume oder Häuser</option></select></div>
-      <div class="row"><label for="prn">Ihr Strompreis laut Vertrag (ct je kWh)</label><div class="prline"><input id="pr" type="range" min="15" max="60" step="0.1" value="35" aria-label="Strompreis Regler"><input id="prn" type="number" min="5" max="99" step="0.1" value="35"></div></div>
+      <div class="row"><label for="prn">Dein Strompreis laut Vertrag (ct je kWh)</label><div class="prline"><input id="pr" type="range" min="15" max="60" step="0.1" value="35" aria-label="Strompreis Regler"><input id="prn" type="number" min="5" max="99" step="0.1" value="35"></div></div>
       <div class="row"><label for="ev">Strom Eigenverbrauch <output id="evO"></output></label><input id="ev" type="range" min="20" max="100" step="5" value="60"></div>
       <div class="row"><label for="fe">Vergütung Stromeinspeisung <output id="feO"></output></label><input id="fe" type="range" min="0" max="12" step="0.5" value="7"></div>
     </div>
@@ -147,7 +148,7 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
   <div class="verdict" id="verdict"></div>
 
   <div class="box flow">
-    <h3 style="margin:0 0 10px">Ihr produzierter Strom</h3>
+    <h3 style="margin:0 0 10px">Dein produzierter Strom</h3>
     <div class="fbar"><span id="fbE" class="fe"></span><span id="fbF" class="ff"></span></div>
     <div class="flegend">
       <div><i class="dE"></i><b>Eigenverbrauch</b><span id="flE">–</span></div>
@@ -155,7 +156,7 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
       <div><i class="dT"></i><b>Stromerzeugung gesamt</b><span id="flT">–</span></div>
     </div>
     <div id="monthBox" hidden>
-      <h4 style="margin:16px 0 6px;font-size:15px">Erzeugung im Jahresverlauf <small style="font-weight:400;color:var(--mute)">(Durchschnitt 2023–2025 an Ihrem Standort)</small></h4>
+      <h4 style="margin:16px 0 6px;font-size:15px">Erzeugung im Jahresverlauf <small style="font-weight:400;color:var(--mute)">(Durchschnitt 2023–2025 an deinem Standort)</small></h4>
       <svg id="mChart" viewBox="0 0 600 200" width="100%" role="img" aria-label="Monatliche Stromerzeugung"></svg>
     </div>
   </div>
@@ -166,11 +167,11 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
       <dt>Wind an der Nabe</dt><dd>Die durchschnittliche Windgeschwindigkeit in der Höhe, in der sich der Rotor dreht. Je höher der Mast, desto stärker der Wind – Bäume und Häuser in der Nähe bremsen ihn.</dd>
       <dt>Auslastung</dt><dd>Wie viel Prozent des Jahres die Anlage umgerechnet mit voller Kraft läuft. Für kleine Windanlagen sind etwa 10 bis 20 % üblich, an sehr windigen Standorten mehr. Werte um 50 % werden im Binnenland praktisch nicht erreicht.</dd>
       <dt>Strom pro Jahr</dt><dd>Die erwartete Strommenge in Kilowattstunden. Zum Vergleich: Ein Haushalt mit drei Personen verbraucht etwa 3.500 bis 4.000 kWh im Jahr.</dd>
-      <dt>Ersparnis pro Jahr</dt><dd>Selbst verbrauchter Strom spart Ihren Strompreis, der Rest bringt die Einspeisevergütung. Wartung, Versicherung und Zählerkosten sind nicht abgezogen.</dd>
-      <dt>Anschaffung</dt><dd>Anlage mit Mast und Montage, gerechnet mit Ihrem Wert je kW. Marktübliche Preise liegen 2026 bei rund 3.000 bis 9.000 € je kW.</dd>
-      <dt>Amortisiert nach</dt><dd>Nach so vielen Jahren hat die Ersparnis die Anschaffung wieder eingespielt – noch ohne Wartung, Versicherung und Reparaturen, mit denen es länger dauert. Kleine Windanlagen halten etwa 20 Jahre. Liegt die Zahl darüber, verdient die Anlage ihr Geld nie zurück.</dd>
+      <dt>Ersparnis pro Jahr</dt><dd>Selbst verbrauchter Strom spart deinen Strompreis, der Rest bringt die Einspeisevergütung. Wartung, Versicherung und Zählerkosten sind nicht abgezogen.</dd>
+      <dt>Anschaffung</dt><dd>Anlage mit Mast und Montage, gerechnet mit deinem Wert je kW. Marktübliche Preise liegen 2026 bei rund 3.000 bis 9.000 € je kW.</dd>
+      <dt>Amortisiert nach</dt><dd>Nach so vielen Jahren hat die Ersparnis die Anschaffung wieder eingespielt – noch ohne Wartung, Versicherung und Reparaturen, mit denen es länger dauert. Kleine Windanlagen halten etwa 20 Jahre.</dd>
     </dl>
-    <p class="note" id="srcNote">So wird gerechnet: Mit Adresse nutzt der Rechner die stündlichen Winddaten der Jahre 2023 bis 2025 an Ihrem Standort (in 10 m und 100 m Höhe) und rechnet sie auf Ihre Masthöhe um. Ohne Adresse verteilt er Ihren eingestellten Mittelwert so, wie Wind in Deutschland typischerweise weht. In beiden Fällen gilt eine typische Leistungskurve: Anlauf ab 2,5 m/s, volle Leistung ab 11 m/s.</p>
+    <p class="note" id="srcNote">So wird gerechnet: Mit Adresse nutzt der Rechner die stündlichen Winddaten der Jahre 2023 bis 2025 an deinem Standort (in 10 m und 100 m Höhe) und rechnet sie auf deine Masthöhe um. Ohne Adresse verteilt er deinen eingestellten Mittelwert so, wie Wind in Deutschland typischerweise weht. In beiden Fällen gilt eine typische Leistungskurve: Anlauf ab 2,5 m/s, volle Leistung ab 11 m/s.</p>
   </details>
 
   <div class="box land">
@@ -182,7 +183,7 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
     </div>
   </div>
 
-  <footer>Demo zur Orientierung, kein Angebot und keine Ertragsgarantie. Winddaten: ERA5-Reanalyse des Copernicus-Klimadienstes (ECMWF), abgerufen über Open-Meteo, Gitterweite rund 25 km – örtliche Hindernisse sind darin nicht enthalten. Adresssuche: OpenStreetMap (Nominatim). Ihre Adresse wird nur dafür an diese Dienste gesendet und nicht gespeichert. Annahmen ohne Adresse: Rayleigh-Windverteilung; generische Leistungskurve (Anlauf 2,5 m/s, Nennleistung ab 11 m/s, Abschaltung 25 m/s), Höhenkorrektur nach Potenzgesetz, Anschaffung im Mittel ≈ 6.000 € je kW (Marktübersichten 2026), ohne Wartung, Versicherung und Förderung. Lebensdauer kleiner Windanlagen: rund 20 Jahre. Dieses Spielzeug verkauft nichts und macht keine Angebote – es soll nur zeigen, was hinter den Versprechen steckt.
+  <footer>Demo zur Orientierung, kein Angebot und keine Ertragsgarantie. Winddaten: ERA5-Reanalyse des Copernicus-Klimadienstes (ECMWF), abgerufen über Open-Meteo, Gitterweite rund 25 km – örtliche Hindernisse sind darin nicht enthalten. Adresssuche: OpenStreetMap (Nominatim). Deine Adresse wird nur dafür an diese Dienste gesendet und nicht gespeichert. Annahmen ohne Adresse: Rayleigh-Windverteilung; generische Leistungskurve (Anlauf 2,5 m/s, Nennleistung ab 11 m/s, Abschaltung 25 m/s), Höhenkorrektur nach Potenzgesetz, Anschaffung im Mittel ≈ 6.000 € je kW (Marktübersichten 2026), ohne Wartung, Versicherung und Förderung. Lebensdauer kleiner Windanlagen: rund 20 Jahre. Dieses Spielzeug verkauft nichts und macht keine Angebote.
     <div class="who"><img src="marco.png" alt="Marco Rietz" width="56" height="56"><p>Erstellt von Nova|LI<br><b>Marco Rietz</b> · Hardenbergstraße 31, 06456 Arnstein OT Wiederstedt<br>Tel. <a href="tel:+4915167661204">01516 7661204</a> · <a href="mailto:rietz.info@gmail.com">rietz.info@gmail.com</a></p></div>
   </footer>
 </div>
@@ -232,7 +233,7 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
   frame(); window.addEventListener('resize',frame);
   var sel=-1;
   function renderLand(){
-    if(sel<0){ $('myLand').innerHTML='<p>Geben Sie oben Ihre Adresse ein – dann sehen Sie hier die Regel für Ihr Bundesland.</p>'; }
+    if(sel<0){ $('myLand').innerHTML='<p>Gib oben deine Adresse ein – dann siehst du hier die Regel für dein Bundesland.</p>'; }
     else { $('myLand').innerHTML='<b>'+LAND[sel][0]+'</b><p>'+LAND[sel][1]+'</p>'; }
     $('othList').innerHTML=LAND.map(function(l,i){ return i===sel?'':'<div class="o"><b>'+l[0]+'</b><span>'+l[1]+'</span></div>'; }).join('');
   }
@@ -277,14 +278,14 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
     $('flT').textContent=nf(E)+' kWh · '+nf(S)+' € im Jahr';
     $('monthBox').hidden=!mon; if(mon) drawMonths(mon,ev);
     $('rP').textContent=pb>40?'über 40 Jahren':nf(pb,1)+' Jahren';
-    // Urteil in Klartext (Marco 24.10.): das Spielzeug soll zeigen, ob es sich rechnet
+    // Rechnung über die Lebensdauer (Marco 24.10.): neutral, ohne Urteil
     var vd=$('verdict'), life=20;
-    if(pb>life){ vd.className='verdict'; vd.innerHTML='<b>Rechnet sich hier nicht.</b><p>Die Anlage hält rund '+life+' Jahre und spart in dieser Zeit etwa '+nf(S*life)+' € – gekostet hat sie '+nf(C)+' €. Unterm Strich bleiben '+nf(C-S*life)+' € Verlust, Wartung und Versicherung noch nicht eingerechnet.</p>'; }
-    else { vd.className='verdict ok'; vd.innerHTML='<b>Könnte sich rechnen – mit viel Wind.</b><p>In '+life+' Jahren spart die Anlage etwa '+nf(S*life)+' €, das sind '+nf(S*life-C)+' € mehr, als sie kostet. Davon gehen noch Wartung, Versicherung und Reparaturen ab. Prüfen Sie, ob an Ihrem Standort wirklich so viel Wind weht.</p>'; }
-    $('mode').textContent=DATA?'Winddaten Ihres Standorts':'eigene Eingabe';
+    if(pb>life){ vd.className='verdict'; vd.innerHTML='<b>Über '+life+' Jahre gerechnet</b><p>Das Windrad spart in dieser Zeit etwa '+nf(S*life)+' € – angeschafft für '+nf(C)+' €. Den Rest zahlt man für die Freude am eigenen Windrad.</p>'; }
+    else { vd.className='verdict ok'; vd.innerHTML='<b>Über '+life+' Jahre gerechnet</b><p>Das Windrad spart in dieser Zeit etwa '+nf(S*life)+' € – angeschafft für '+nf(C)+' €. Davon gehen noch Wartung und Versicherung ab.</p>'; }
+    $('mode').textContent=DATA?'Winddaten deines Standorts':'eigene Eingabe';
   }
   ['p','h','g','ev','fe','ck'].forEach(function(i){$(i).addEventListener('input',calc);$(i).addEventListener('change',calc)});
-  $('v').addEventListener('input',function(){ if(DATA){ DATA=null; $('st').textContent='Sie haben den Wind selbst eingestellt – der Rechner nutzt jetzt Ihren Wert statt der Standortdaten.'; } calc(); });
+  $('v').addEventListener('input',function(){ if(DATA){ DATA=null; $('st').textContent='Du hast den Wind selbst eingestellt – der Rechner nutzt jetzt deinen Wert statt der Standortdaten.'; } calc(); });
   $('pr').addEventListener('input',function(){ $('prn').value=this.value; calc(); });
   $('prn').addEventListener('input',function(){ var x=+this.value; if(x>0){ $('pr').value=Math.max(15,Math.min(60,x)); } calc(); });
   async function load(){
@@ -309,7 +310,7 @@ footer{border-top:1px solid var(--rule);margin-top:28px;padding:14px 0 30px;font
       var i=LAND.findIndex(function(l){return l[0]===st}); if(i>=0) pick(i);
       $('st').textContent='Winddaten geladen: Ø '+nf(m,1)+' m/s in 10 m Höhe ('+nf(n)+' Stundenwerte 2023–2025, ERA5/Copernicus).'+(st?' Bundesland: '+st+'.':'');
       calc();
-    }catch(e){ $('st').textContent=(location.hostname.indexOf('claude')>=0||location.protocol==='data:'||/Failed to fetch|NetworkError/i.test(e.message))?'Die Verbindung zu den Wetter- und Kartendiensten ist hier gesperrt (Vorschau). Auf der eigenen Webseite rietzinfo-dot.github.io/Kleinwindkraft funktioniert die Adresssuche. Den Wind können Sie unten auch selbst einstellen.':'Die Winddaten konnten gerade nicht geladen werden ('+e.message+'). Bitte später erneut versuchen oder den Wind unten selbst einstellen.'; }
+    }catch(e){ $('st').textContent=(location.hostname.indexOf('claude')>=0||location.protocol==='data:'||/Failed to fetch|NetworkError/i.test(e.message))?'Die Verbindung zu den Wetter- und Kartendiensten ist hier gesperrt (Vorschau). Auf der eigenen Webseite rietzinfo-dot.github.io/Kleinwindkraft funktioniert die Adresssuche. Den Wind kannst du unten auch selbst einstellen.':'Die Winddaten konnten gerade nicht geladen werden ('+e.message+'). Bitte später erneut versuchen oder den Wind unten selbst einstellen.'; }
   }
   $('go').addEventListener('click',load);
   $('adr').addEventListener('keydown',function(e){ if(e.key==='Enter') load(); });

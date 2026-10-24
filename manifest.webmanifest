@@ -1,7 +1,7 @@
 {
   "name": "KleinWindKraftCheck",
   "short_name": "KleinWindKraftCheck",
-  "description": "Kleines Windrad per Handy in Originalgröße ansehen und mit echten Winddaten nachrechnen, ob es sich lohnt.",
+  "description": "Ein Windrad im Garten! Per Handy in Originalgröße ansehen und mit echten Winddaten durchspielen.",
   "lang": "de",
   "start_url": "./",
   "scope": "./",
